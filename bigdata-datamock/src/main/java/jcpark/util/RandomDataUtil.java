@@ -1,4 +1,4 @@
-package jcpark.datamock.util;
+package jcpark.util;
 
 import java.time.LocalDateTime;
 import java.util.Random;

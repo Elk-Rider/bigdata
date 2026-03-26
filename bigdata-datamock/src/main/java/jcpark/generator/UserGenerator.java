@@ -1,7 +1,7 @@
-package jcpark.datamock.generator;
+package jcpark.generator;
 
-import jcpark.datamock.config.DbConfig;
-import jcpark.datamock.util.RandomDataUtil;
+import jcpark.config.DbConfig;
+import jcpark.util.RandomDataUtil;
 
 import java.sql.*;
 import java.time.LocalDateTime;

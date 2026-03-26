@@ -1,4 +1,4 @@
-package jcpark.datamock.config;
+package jcpark.config;
 
 import java.io.IOException;
 import java.io.InputStream;

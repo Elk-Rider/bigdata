@@ -1,8 +1,8 @@
-package jcpark.datamock;
+package jcpark;
 
-import jcpark.datamock.generator.OrderTradeGenerator;
-import jcpark.datamock.generator.PriceGenerator;
-import jcpark.datamock.generator.UserGenerator;
+import jcpark.generator.OrderTradeGenerator;
+import jcpark.generator.PriceGenerator;
+import jcpark.generator.UserGenerator;
 
 import java.util.List;
 import java.util.concurrent.Executors;

@@ -1,6 +1,6 @@
-package jcpark.datamock.generator;
+package jcpark.generator;
 
-import jcpark.datamock.config.DbConfig;
+import jcpark.config.DbConfig;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

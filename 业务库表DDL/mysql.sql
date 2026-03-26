@@ -3,12 +3,13 @@ CREATE
 DATABASE IF NOT EXISTS `test`
     CHARACTER SET = utf8mb4
     COLLATE = utf8mb4_unicode_ci
-    COMMENT = '测试数据库 - 用于学习和测试';
 
 
 -- 2. 切换到 test 数据库
 USE
 test;
+
+--交易明细表
 
 --交易明细表
 
@@ -75,7 +76,7 @@ CREATE TABLE `user`
     `last_login_time`            DATETIME(3) COMMENT '最后一次活跃时间',
     `monitor_currency_config`    JSON NULL COMMENT '货币价格监控配置: 目标货币及阈值',
     `monitor_transaction_config` JSON NULL COMMENT '用户交易监控配置: 监控对象及金额阈值',
-    `user_preferences`           JSON NULL COMMENT '用户通用偏好设置'
+    `user_preferences`           JSON NULL COMMENT '用户通用偏好设置',
     PRIMARY KEY (`user_id`),
     -- 建立索引以支持 Flink 的维表 Lookup Join
     UNIQUE KEY `uk_appsflyer_id` (`appsflyer_id`)

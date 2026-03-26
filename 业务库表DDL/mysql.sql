@@ -1,3 +1,15 @@
+-- 推荐写法：带字符集和排序规则
+CREATE
+DATABASE IF NOT EXISTS `test`
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci
+    COMMENT = '测试数据库 - 用于学习和测试';
+
+
+-- 2. 切换到 test 数据库
+USE
+test;
+
 --交易明细表
 
 CREATE TABLE `trade`
@@ -15,14 +27,10 @@ CREATE TABLE `trade`
     -- 交易种类：如内购(IAP)、广告变现(Ad Revenue)、订阅(Subscription)
     `trade_type`       VARCHAR(30)    NOT NULL COMMENT '交易种类(IAP/Revenue/Subscription)',
     -- 交易量：使用 DECIMAL 保证金融级计算精度
-    `amount`           DECIMAL(18, 4) NOT NULL DEFAULT '0.0000' COMMENT '交易金额/价值',
+    `amount`           DECIMAL(18, 6) NOT NULL DEFAULT '0.0000' COMMENT '交易金额/价值',
     -- 补充：币种信息，方便计算 ROAS [cite: 1, 6]
     `currency`         VARCHAR(10)             DEFAULT 'USD' COMMENT '币种',
-    PRIMARY KEY (`trade_id`),
-    -- 索引优化：方便按时间范围查询流水
-    KEY                `idx_trade_time` (`trade_time`),
-    -- 索引优化：方便关联转出方进行风控分析
-    KEY                `idx_sender_user` (`sender_user_id`)
+    PRIMARY KEY (`trade_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='实时交易流水事实表';
 
 
@@ -43,15 +51,11 @@ CREATE TABLE `order`
     `create_time`     DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '下单时间',
     `pay_time`        DATETIME(3) NULL COMMENT '支付完成时间',
     `update_time`     DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '最后更新时间',
-    PRIMARY KEY (`order_id`),
-    -- 索引优化
-    KEY               `idx_user_id` (`user_id`),
-    KEY               `idx_create_time` (`create_time`),
-    KEY               `idx_campaign` (`campaign_id`)
+    PRIMARY KEY (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='业务订单事实表';
 
 --用户信息表
-CREATE TABLE `users`
+CREATE TABLE `user`
 (
     -- 核心关联键
     `user_id`                    VARCHAR(64) NOT NULL COMMENT '业务系统内部唯一用户ID',
@@ -74,16 +78,13 @@ CREATE TABLE `users`
     `user_preferences`           JSON NULL COMMENT '用户通用偏好设置'
     PRIMARY KEY (`user_id`),
     -- 建立索引以支持 Flink 的维表 Lookup Join
-    UNIQUE KEY `uk_appsflyer_id` (`appsflyer_id`),
-    KEY                          `idx_register_time` (`register_time`),
-    KEY                          `idx_first_source` (`first_media_source`)
+    UNIQUE KEY `uk_appsflyer_id` (`appsflyer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户多维属性表(ID映射与画像)';
 
 --交易价格表
-CREATE TABLE `dim_realtime_assets_price`
+CREATE TABLE `price`
 (
-    -- 唯一标识
-    `id`           BIGINT         NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+    `update_time`  DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '价格最后更新时间',
     -- 资产识别
     `asset_symbol` VARCHAR(20)    NOT NULL COMMENT '资产代码 (如 BTC, XAU, AAPL, EUR)',
     `asset_name`   VARCHAR(50) COMMENT '资产全称 (如 Bitcoin, Gold, Apple Inc)',
@@ -96,11 +97,7 @@ CREATE TABLE `dim_realtime_assets_price`
     `price_source` VARCHAR(50) COMMENT '数据来源 (如 Binance, Yahoo Finance, Kitco)',
     `status`       TINYINT DEFAULT '1' COMMENT '状态: 1-启用, 0-停用',
     -- 价格更新时间 (要求)
-    `update_time`  DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '价格最后更新时间',
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`update_time`),
     -- 唯一索引：确保每个资产代码在同一来源下唯一，方便 Flink CDC 关联
-    UNIQUE KEY `uk_asset_source` (`asset_symbol`, `price_source`),
-    -- 索引：方便按资产类别快速筛选监控
-    KEY            `idx_trade_type` (`trade_type`),
-    KEY            `idx_update_time` (`update_time`)
+    UNIQUE KEY `uk_asset_source` (`asset_symbol`, `price_source`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='实时资产价格表 (涵盖加密货币、黄金、股票及汇率)';

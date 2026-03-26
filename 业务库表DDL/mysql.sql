@@ -50,7 +50,7 @@ CREATE TABLE `order`
     KEY               `idx_campaign` (`campaign_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='业务订单事实表';
 
-
+--用户信息表
 CREATE TABLE `users`
 (
     -- 核心关联键
@@ -79,7 +79,7 @@ CREATE TABLE `users`
     KEY                          `idx_first_source` (`first_media_source`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户多维属性表(ID映射与画像)';
 
-
+--交易价格表
 CREATE TABLE `dim_realtime_assets_price`
 (
     -- 唯一标识

@@ -3,8 +3,26 @@
 
 整体学习环境为VMWare克隆的三台linux服务器，操作系统我centos 7  
 
+集群服务部署分布：
+bjc55 (核心主控): Zookeeper, HDFS NameNode (Active), YARN ResourceManager, Hive Metastore, MySQL (元数据库), Kafka Broker, Flink JobManager, Trino Coordinator, Doris FE。
+
+bjc56 (容灾与计算): Zookeeper, HDFS NameNode (Standby), YARN ResourceManager (Standby), DataNode, Kafka Broker, Flink TaskManager, Trino Worker, Doris BE。
+
+bjc57 (纯计算存储): Zookeeper, DataNode, Kafka Broker, Flink TaskManager, Trino Worker, Doris BE。
+
 落地方案框架推荐 Gemini3 pro
 ![img_1.png](img_1.png)!
+
+框架下载地址如下：
+https://archive.apache.org/dist/zookeeper/zookeeper-3.8.4/
+https://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+https://paimon.apache.org/downloads
+https://www.apache.org/dyn/closer.lua/flink/flink-1.19.3/flink-1.19.3-bin-scala_2.12.tgz
+https://archive.apache.org/dist/hive/hive-3.1.3/apache-hive-3.1.3-bin.tar.gz
+https://kafka.apache.org/community/downloads/
+https://trino.io/download?utm_source=chatgpt.com
+https://download.selectdb.com/apache-doris-2.1.5-bin-x64.tar.gz
+
 
 实时入湖（Kafka -> Flink -> Paimon）：
 交易流水进入 Kafka，Flink 1.19 实时消费，利用 Paimon 1.3 的 bucket = -1 (动态分桶) 和 changelog-producer = lookup 写入底层 HDFS。
@@ -25,5 +43,3 @@ Flink 在写入 Paimon 时，将表结构自动同步到 Hive Metastore (HMS 3.1
 3. Trino 插件报错(类加载器污染),Trino 集群启动失败，或执行 SQL 时报错“找不到 Catalog”，发生严重的类加载器冲突。,Trino 450+ 已经原生内置了 Paimon 连接器。严禁画蛇添足地把 paimon-trino-*.jar 手动丢进 Trino 的 plugin 目录！只需在 etc/catalog/paimon.properties 中写明 connector.name=paimon 即可。
 
 
-5. step 1 
-模拟生成数据，在mysql中模拟规则数据， kafka中模拟交易数据。

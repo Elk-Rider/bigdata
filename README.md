@@ -11,7 +11,7 @@ bjc56 (容灾与计算): Zookeeper, HDFS NameNode (Standby), YARN ResourceManage
 bjc57 (纯计算存储): Zookeeper, DataNode, Kafka Broker, Flink TaskManager, Trino Worker, Doris BE。
 
 落地方案框架推荐 Gemini3 pro
-![img_1.png](img_1.png)!
+![img_1.png](picture/img_1.png)!
 
 框架下载地址如下：
 https://archive.apache.org/dist/zookeeper/zookeeper-3.8.4/

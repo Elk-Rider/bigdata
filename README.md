@@ -4,7 +4,7 @@
 整体学习环境为VMWare克隆的三台linux服务器，操作系统我centos 7  
 
 落地方案框架推荐 Gemini3 pro
-![img.png](img.png)
+![img_1.png](img_1.png)!
 
 实时入湖（Kafka -> Flink -> Paimon）：
 交易流水进入 Kafka，Flink 1.19 实时消费，利用 Paimon 1.3 的 bucket = -1 (动态分桶) 和 changelog-producer = lookup 写入底层 HDFS。

@@ -22,6 +22,7 @@ https://archive.apache.org/dist/hive/hive-3.1.3/apache-hive-3.1.3-bin.tar.gz
 https://kafka.apache.org/community/downloads/
 https://trino.io/download?utm_source=chatgpt.com
 https://download.selectdb.com/apache-doris-2.1.5-bin-x64.tar.gz
+https://vault.centos.org/7.9.2009/isos/x86_64/
 
 
 实时入湖（Kafka -> Flink -> Paimon）：

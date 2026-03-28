@@ -3,6 +3,46 @@
 
 整体学习环境为VMWare克隆的三台linux服务器，操作系统我centos 7  
 
+环境变量如下：
+
+    sudo vim /etc/profile.d/my_env.sh
+
+        export PATH=$PATH:/opt/bin
+        ##hdfs和yarn的用户变量配置
+        export HDFS_NAMENODE_USER=root
+        export HDFS_DATANODE_USER=root
+        export HDFS_SECONDARYNAMENODE_USER=root
+        export YARN_RESOURCEMANAGER_USER=root
+        export YARN_NODEMANAGER_USER=root
+        ##
+        export JAVA_HOME=/opt/module/jdk
+        export PATH=$PATH:$JAVA_HOME/bin
+        export ZK_HOME=/opt/module/zookeeper
+        export PATH=$PATH:$ZK_HOME/bin
+        export KAFKA_HOME=/opt/module/kafka
+        export PATH=$PATH:$KAFKA/bin
+        export HADOOP_HOME=/opt/module/hadoop
+        export PATH=$PATH:$HADOOP_HOME/bin
+        export PATH=$PATH:$HADOOP_HOME/sbin
+        export SPARK_HOME=/opt/module/spark
+        export PATH=$PATH:$SPARK_HOME/bin
+        export PATH=$PATH:$SPARK_HOME/sbin
+        export FLINK_HOME=/opt/module/flink
+        export PATH=$PATH:$FLINK_HOME/bin
+        export HIVE_HOME=/opt/module/hive
+        export PATH=$PATH:$HIVE_HOME/bin
+        export HBASE_HOME=/opt/module/hbase
+        export PATH=$PATH:$HBASE_HOME/bin
+        export PHOENIX_HOME=/opt/module/phoenix
+        export PHOENIX_CLASSPATH=$PHOENIX_CLASSPATH
+        export PATH=$PATH:$PHOENIX_HOME/bin
+        export HADOOP_CLASSPATH='hadoop classpath'
+        export HADOOP_CONF_DIR=/opt/module/hadoop/etc/hadoop
+
+    刷新环境配置
+    source /etc/profile.d/my_env.sh
+
+
 集群服务部署分布：
 bjc55 (核心主控): Zookeeper, HDFS NameNode (Active), YARN ResourceManager, Hive Metastore, MySQL (元数据库), Kafka Broker, Flink JobManager, Trino Coordinator, Doris FE。
 

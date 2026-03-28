@@ -48,6 +48,15 @@ Apache Hadoop 3.3.6 集群部署手册
                 <name>hadoop.tmp.dir</name>
                 <value>/opt/module/hadoop/data</value>
                 </property>
+                <!--HiveServer2 默认会以“代理”模式运行。当你用 root 用户连接 Beeline 时，HiveServer2（由 root 启动）尝试代表 root 去访问 HDFS 上的文件。但在 Hadoop 的安全策略中，必须显式授权哪个用户可以代理其他用户。即使你是用 root 代理 root，在 Hadoop 的规则里也需要配置。 -->
+                <property>
+                <name>hadoop.proxyuser.root.hosts</name>
+                <value>*</value>
+                </property>
+                <property>
+                <name>hadoop.proxyuser.root.groups</name>
+                <value>*</value>
+                </property>
                 </configuration>
 # hdfs-site.xml
          vim /opt/module/hadoop/etc/hadoop/hdfs-site.xml
@@ -123,10 +132,12 @@ Apache Hadoop 3.3.6 集群部署手册
    启动 HDFS（在 bjc55 上执行）：
 
             /opt/module/hadoop/sbin/start-dfs.sh
+            /opt/module/hadoop/sbin/stop-dfs.sh
 
 启动 YARN（注意：必须在 bjc56 上执行，因为它是 RM）：
 
       /opt/module/hadoop/sbin/start-yarn.sh
+      /opt/module/hadoop/sbin/stop-yarn.sh
 
 3. 验证检查
    第一步：JPS 进程检查

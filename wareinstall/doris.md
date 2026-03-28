@@ -38,16 +38,21 @@
         sudo swapoff -a
 
 # 并在 /etc/fstab 中注释掉 swap 相关行
-二、 具体安装步骤
+
+![img.png](img.png)
+
+    allsync.sh /etc/fstab
+
+# 二、 具体安装步骤
 1. 解压与分发
    在 bjc55 上执行：
 
-        tar -zxvf apache-doris-2.1.x-bin-x64.tar.gz -C /opt/module/
+        tar -zxvf /opt/software/apache-doris-2.1.5-bin-x64.tar.gz -C /opt/module/
         cd /opt/module/
-        mv apache-doris-2.1.x-bin-x64 doris
+        mv apache-doris-2.1.5-bin-x64 doris
 2. 配置 FE (Frontend) - 在 bjc55 操作
 
-            vim doris/fe/conf/fe.conf：
+            vim doris/fe/conf/fe.conf
 
 Properties
 

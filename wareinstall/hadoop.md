@@ -33,9 +33,11 @@ Apache Hadoop 3.3.6 集群部署手册
    这是最核心的一步，共有 6 个文件需要配置：
 
 #  hadoop-env.sh
+         vim /opt/module/hadoop/etc/hadoop/hadoop-env.sh
 
-        export JAVA_HOME=/opt/module/jdk
+         export JAVA_HOME=/opt/module/jdk
 # core-site.xml
+      vim /opt/module/hadoop/etc/hadoop/core-site.xml 
 
                 <configuration>
                 <property>
@@ -48,6 +50,7 @@ Apache Hadoop 3.3.6 集群部署手册
                 </property>
                 </configuration>
 # hdfs-site.xml
+         vim /opt/module/hadoop/etc/hadoop/hdfs-site.xml
 
                 <configuration>
                 <property>
@@ -64,7 +67,8 @@ Apache Hadoop 3.3.6 集群部署手册
                 </property>
                 </configuration>
 #  yarn-site.xml
-                
+           vim /opt/module/hadoop/etc/hadoop/yarn-site.xml 
+
                 <configuration>
                 <property>
                 <name>yarn.resourcemanager.hostname</name>
@@ -80,22 +84,35 @@ Apache Hadoop 3.3.6 集群部署手册
                 </property>
                 </configuration>
 #  mapred-site.xml
+
+           vim /opt/module/hadoop/etc/hadoop/mapred-site.xml
+
                 <configuration>
                 <property>
                 <name>mapreduce.framework.name</name>
                 <value>yarn</value>
                 </property>
+               <property>
+                   <name>mapreduce.application.classpath</name>
+                   <value>/opt/module/hadoop/etc/hadoop:/opt/module/hadoop/share/hadoop/common/lib/*:/opt/module/hadoop/share/hadoop/common/*:/opt/module/hadoop/share/hadoop/hdfs:/opt/module/hadoop/share/hadoop/hdfs/lib/*:/opt/module/hadoop/share/hadoop/hdfs/*:/opt/module/hadoop/share/hadoop/mapreduce/*:/opt/module/hadoop/share/hadoop/yarn:/opt/module/hadoop/share/hadoop/yarn/lib/*:/opt/module/hadoop/share/hadoop/yarn/*
+               </value>
+               </property>
                 </configuration>
 #  workers（关键：决定哪些机器是 DataNode）
 删除原有的 localhost，修改为：
+
                 bjc55
                 bjc56
                 bjc57
 
 
+3. 集群分发
+   将配置好的 Hadoop 同步到其他节点：
 
+         scp -r /opt/module/hadoop bjc56:/opt/module/
+         scp -r /opt/module/hadoop bjc57:/opt/module/
 
-    三、 服务初始化与检查
+三、 服务初始化与检查
 1. 格式化 NameNode（仅第一次启动前执行！）
    在 bjc55 上执行：
 
@@ -108,7 +125,8 @@ Apache Hadoop 3.3.6 集群部署手册
             /opt/module/hadoop/sbin/start-dfs.sh
 
 启动 YARN（注意：必须在 bjc56 上执行，因为它是 RM）：
-/opt/module/hadoop/sbin/start-yarn.sh
+
+      /opt/module/hadoop/sbin/start-yarn.sh
 
 3. 验证检查
    第一步：JPS 进程检查
@@ -134,7 +152,7 @@ Bash
     /opt/module/hadoop/bin/hadoop fs -mkdir /input
 # 上传一个小文件
     /opt/module/hadoop/bin/hadoop fs -put /etc/hosts /input
-# 运行官方 Demo
+# 运行官方 Demohadoop
     /opt/module/hadoop/bin/hadoop jar /opt/module/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.6.jar wordcount /input /output
 # 查看结果
     /opt/module/hadoop/bin/hadoop fs -cat /output/*

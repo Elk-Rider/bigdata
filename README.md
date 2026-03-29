@@ -14,6 +14,7 @@
         https://trino.io/download?utm_source=chatgpt.com
         https://download.selectdb.com/apache-doris-2.1.5-bin-x64.tar.gz
         https://vault.centos.org/7.9.2009/isos/x86_64/
+        https://download.oracle.com/java/22/archive/jdk-22.0.2_linux-x64_bin.tar.gz
 
 环境变量如下：
 

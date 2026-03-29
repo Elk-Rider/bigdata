@@ -1,6 +1,6 @@
 # 🚀 Trino 450+ 生产级高可用部署文档
 
-第一步：准备专属“引擎”（JDK 22 隔离部署） Trino 480+ 极其挑剔，拒绝与 Hadoop 共用 JDK 8。
+第一步：准备专属“引擎”（JDK 22 隔离部署） Trino 480 极其挑剔，拒绝与 Hadoop 共用 JDK 8。
 
 **不共用jdk原因如下：**
 
@@ -71,12 +71,14 @@
         coordinator=true
         # 生产环境建议主节点不参与计算，专注于调度
         node-scheduler.include-coordinator=false
-        http-server.http.port=8080
+        http-server.http.port=18080
         query.max-memory=8GB
-        query.max-memory-per-node=2GB
-        query.max-total-memory-per-node=3GB
+        query.max-memory-per-node=3GB
+        #query.max-total-memory-per-node=3GB  该配置已经被弃用，取消注释会报错
+        # 堆外内存限制（如果你的 JVM 给了 8G，可以额外给一点点）
+        memory.heap-headroom-per-node=1GB
         # 供 Worker 汇报心跳的地址，指向 bjc55
-        discovery.uri=http://bjc55:8080
+        discovery.uri=http://bjc55:18080
 4. 日志级别配置：/opt/module/trino/etc/log.properties
 
         io.trino=INFO
@@ -98,7 +100,7 @@
 
     #!/bin/bash
     # 强制指定 Trino 启动时使用的 Java 运行环境
-        export TRINO_JAVA_HOME=/opt/module/jdk-22
+        export TRINO_JAVA_HOME=/opt/module/jdk25
         export PATH=$TRINO_JAVA_HOME/bin:$PATH
         记得给它执行权限：chmod +x bin/env.sh
 
@@ -126,7 +128,8 @@
 
 Bash
 # 在 bjc55, bjc56, bjc57 上执行
-    /opt/module/trino/bin/launcher start
+      /opt/module/trino/bin/launcher start
+      JAVA_HOME=/opt/module/jdk25 /opt/module/trino/bin/launcher run
 如果启动报错，立刻去查看 /opt/module/trino/data/var/log/server.log，一切报错原因都在里面。
 
 💡 架构师温馨提示：如何验证大功告成？

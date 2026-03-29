@@ -92,13 +92,13 @@ stop_doris() {
 start_trino() {
     echo "-------- 启动 Trino --------"
     for host in bjc55 bjc56 bjc57; do
-        ssh $host "$TRINO_HOME/bin/launcher start"
+        ssh $host "JAVA_HOME=/opt/module/jdk25 /opt/module/trino/bin/launcher start"
     done
 }
 stop_trino() {
     echo "-------- 停止 Trino --------"
     for host in bjc55 bjc56 bjc57; do
-        ssh $host "$TRINO_HOME/bin/launcher stop"
+        ssh $host "JAVA_HOME=/opt/module/jdk25  $TRINO_HOME/bin/launcher stop"
     done
 }
 

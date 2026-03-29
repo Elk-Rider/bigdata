@@ -14,14 +14,15 @@
         https://trino.io/download?utm_source=chatgpt.com
         https://download.selectdb.com/apache-doris-2.1.5-bin-x64.tar.gz
         https://vault.centos.org/7.9.2009/isos/x86_64/
-        https://download.oracle.com/java/22/archive/jdk-22.0.2_linux-x64_bin.tar.gz
-
+        https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz
+        https://repository.apache.org/snapshots/org/apache/paimon/   搭配paimon的 trino476插件 paimon-trino-476-1.3-20260329.003606-12-plugin.tar.gz
 环境变量如下：
 
     sudo vim /etc/profile.d/my_env.sh
 
         export TRINO_HOME=/opt/module/trino
         export PATH=$PATH:$TRINO_HOME/bin
+
         export PATH=$PATH:/opt/bin
         ##hdfs和yarn的用户变量配置
         export HDFS_NAMENODE_USER=root

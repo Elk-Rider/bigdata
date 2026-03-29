@@ -39,7 +39,7 @@
 
 # 并在 /etc/fstab 中注释掉 swap 相关行
 
-![img.png](img.png)
+![img.png](../picture/dorisBE节点服务配置.png)
 
     allsync.sh /etc/fstab
 
@@ -125,7 +125,7 @@ Bash
       #验证 BE 状态
       SHOW BACKENDS\G
 # 成功如下图：
-![img_1.png](../picture/doris-客户端验证.png)
+![img_1.png](../picture/doris客户端验证.png)
 四、 最终验证
 1. 检查节点状态
    在 MySQL 客户端中执行：

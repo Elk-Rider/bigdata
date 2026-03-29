@@ -20,6 +20,8 @@
 
     sudo vim /etc/profile.d/my_env.sh
 
+        export TRINO_HOME=/opt/module/trino
+        export PATH=$PATH:$TRINO_HOME/bin
         export PATH=$PATH:/opt/bin
         ##hdfs和yarn的用户变量配置
         export HDFS_NAMENODE_USER=root

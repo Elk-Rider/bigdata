@@ -66,7 +66,7 @@
 
 
 # 落地方案框架推荐 Gemini3 pro
-![img_1.png](picture/img_1.png)!
+![img_1.png](picture/集群版本.png)!
 
 
 

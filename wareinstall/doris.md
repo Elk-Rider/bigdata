@@ -50,27 +50,22 @@
         tar -zxvf /opt/software/apache-doris-2.1.5-bin-x64.tar.gz -C /opt/module/
         cd /opt/module/
         mv apache-doris-2.1.5-bin-x64 doris
-2. 配置 FE (Frontend) - 在 bjc55 操作
+2. Properties 配置 FE (Frontend) - 在 bjc55 操作
 
-            vim doris/fe/conf/fe.conf
-
-Properties
+进入 doris/fe/conf/fe.conf
 
         # 1. 配置文件存储路径（记得手动创建）
         meta_dir = /opt/module/doris/fe/doris-meta
-
         # 2. 绑定内网 IP（防止多网卡识别错误，写你当前机器的网段）
-        priority_networks = 192.168.10.0/24
+        priority_networks = 192.168.88.0/24
         3. 配置 BE (Backend) - 在 bjc55 操作
-           进入 doris/be/conf/be.conf：
+
+进入 doris/be/conf/be.conf：
         
-        Properties
         # 1. 配置数据存储路径（记得手动创建）
         storage_root_path = /opt/module/doris/be/storage_root
-        
         # 2. 绑定内网 IP
-        priority_networks = 192.168.10.0/24
-        
+        priority_networks = 192.168.88.0/24
         # 3. 如果你的 CPU 不支持 AVX2 指令集（老旧虚拟机），需在配置文件最后添加：
         # enable_avx2 = false
 4. 同步分发
@@ -85,7 +80,7 @@ Properties
 
 1. 启动 FE (在 bjc55)
 
-       opt/module/doris/fe/bin/start_fe.sh --daemon
+       /opt/module/doris/fe/bin/start_fe.sh --daemon
 2. 启动 BE (在 bjc55, bjc56, bjc57)
 
        /opt/module/doris/be/bin/start_be.sh --daemon
@@ -94,9 +89,31 @@ Properties
 
 Bash
 # 使用你之前装 Hive 时的 mysql 客户端即可
-    mysql -h bjc55 -P 9030 -uroot
-进入 Doris 命令行后，执行以下 SQL 添加三个后端：
+      从主机中安装数据库客户端使用如下命令：
+          mysql -h bjc55 -P 9030 -uroot
+      从 Docker 容器连接 Doris
+      由于 MySQL 在容器内，你不能直接用 localhost，必须指定宿主机的 实际 IP。
+      
+      方案 A：直接运行临时容器连接（最推荐，干净快捷）
+      
+            如果你只是想临时进去配置一下，直接跑这个命令：
+            Bash
+            docker run -it --rm mysql:latest mysql -h 192.168.88.156 -P 9030 -u root
+            -h: 必须写宿主机的物理 IP（即你配置 priority_networks 的那个段）。
+            
+            --rm: 退出后自动销毁容器，不占用空间。
+            
+            注意：初始安装没有密码，提示 Enter password 时直接按 回车。
+      
+      方案 B：进入已有的 MySQL 容器连接
+      
+            如果你已经有一个运行中的 MySQL 容器（名为 my-mysql）：
+            Bash
+            docker exec -it my-mysql mysql -h 192.168.88.156 -P 9030 -u root
+            进入 Doris 命令行后，执行以下 SQL 添加三个后端：
 
+
+# 在BE节点添加后端：
         SQL
         -- 添加 bjc55
         ALTER SYSTEM ADD BACKEND "bjc55:9050";
@@ -104,6 +121,11 @@ Bash
         ALTER SYSTEM ADD BACKEND "bjc56:9050";
         -- 添加 bjc57
         ALTER SYSTEM ADD BACKEND "bjc57:9050";
+
+      #验证 BE 状态
+      SHOW BACKENDS\G
+# 成功如下图：
+![img_1.png](../picture/doris-客户端验证.png)
 四、 最终验证
 1. 检查节点状态
    在 MySQL 客户端中执行：
@@ -131,7 +153,7 @@ SQL
         INSERT INTO user_test VALUES (1, 'bjc', 'ChengDu', 27);
 
         SELECT * FROM user_test;
-老师的课后总结：
+# 总结：
 
     FE vs BE：FE 负责解析查询、存储元数据，它是轻量级的；BE 负责存数据、算数据，它是重量级的。所以一般把 FE 放在主节点，BE 全集群部署。
     

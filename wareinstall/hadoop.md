@@ -6,7 +6,7 @@ Apache Hadoop 3.3.6 集群部署手册
     软件版本：hadoop-3.3.6.tar.gz
 
 
-![img.png](../picture/img.png)
+![img.png](../picture/集群规划.png)
 
 
 # 一、 环境预检查

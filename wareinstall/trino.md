@@ -138,8 +138,44 @@ Bash
 将其重命名为 trino 并赋予执行权限：chmod +x trino。
 
 连接你的主节点并执行查询：
+# 如果你报错如下：
+报错信息： recognizes class file versions up to 52.0（只认 JDK 8）。
 
-Bash
-./trino --server bjc55:8080 --catalog paimon
-trino> SHOW SCHEMAS;
-只要你能看到底层的库名，甚至能 SELECT * 查出之前 Flink 写入的数据，恭喜你，你的 Trino 极速探照灯已经成功点亮了这片数据湖！
+*根本原因*： 你运行 ./trino 时，这个可执行 Jar 包内部会自动寻找 java 命令。因为它在系统的 PATH 中第一顺位找到了 JDK 8，所以它用了旧版 Java 去跑新版 CLI。
+
+2. 方案 A：直接指定全路径（最推荐，暴力有效）
+跳过所有环境变量，直接告诉系统用哪个 java 去跑这个文件：
+
+         /opt/module/jdk25/bin/java -jar ./trino --server localhost:8888 --catalog paimon --schema default
+
+方案 B：临时修正 PATH 环境 **如果你希望直接运行 ./trino，必须把 JDK 25 的 bin 目录插到 PATH 的最前面：**
+
+      export PATH=/opt/module/jdk25/bin:$PATH
+      ./trino --server localhost:18080 --catalog paimon --schema default
+
+3. 日常使用的“终极懒人”办法
+   为了以后不用每次都敲这么长一串路径，建议给 Trino CLI 做一个 Alias（别名）。
+
+打开你的用户配置文件：
+
+      Bash
+      vim ~/.bashrc
+      在文件末尾添加一行：
+      
+      Bash
+      alias trino='/opt/module/jdk25/bin/java -jar /opt/bin/trino --server 192.168.88.155:18080'
+      (注：请将 /opt/module/software/trino 替换为你文件的实际全路径)
+      
+      刷新配置：
+      
+      Bash
+      source ~/.bashrc
+      以后只需要输入一个词就能进客户端了：
+      
+      Bash
+      trino
+      Bash
+      ./trino --server bjc55:18080 --catalog paimon
+      trino> SHOW SCHEMAS;
+
+只要你能看到底层的库名，甚至能 SELECT * 查出之前 Flink 写入的数据，就ojbk了

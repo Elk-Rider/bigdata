@@ -1,7 +1,7 @@
 # bigdata
 一套企业级金融交易类的流式湖仓一体大数据平台，方案整体具备TB级的数据采集，分析功能，结合即席查询能力，具备日常固定报表的开发等
 
-整体学习环境为VMWare克隆的三台linux服务器，操作系统我centos 7  
+整体学习环境为VMWare克隆的三台linux服务器，操作系统  centos 7.6
 
 所用框架下载地址如下：
 
@@ -11,11 +11,12 @@
         https://www.apache.org/dyn/closer.lua/flink/flink-1.19.3/flink-1.19.3-bin-scala_2.12.tgz
         https://archive.apache.org/dist/hive/hive-3.1.3/apache-hive-3.1.3-bin.tar.gz
         https://kafka.apache.org/community/downloads/
-        https://trino.io/download?utm_source=chatgpt.com
+        https://repo1.maven.org/maven2/io/trino/trino-server/440/trino-server-440.tar.gz
+        https://repository.apache.org/content/repositories/snapshots/org/apache/paimon/paimon-trino-440/1.0-SNAPSHOT/  trino的paimon插件
         https://download.selectdb.com/apache-doris-2.1.5-bin-x64.tar.gz
         https://vault.centos.org/7.9.2009/isos/x86_64/
         https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz
-        https://repository.apache.org/snapshots/org/apache/paimon/   搭配paimon的 trino476插件 paimon-trino-476-1.3-20260327.003352-10-plugin.tar.gz
+        https://repository.apache.org/snapshots/org/apache/paimon/   
         https://dolphinscheduler.apache.org/zh-cn/download/3.4.1
 
 环境变量如下：
@@ -70,6 +71,7 @@
 
 
 # 落地方案框架推荐 Gemini3 pro
+# **trino降级为440，实测480坑太多，而且paimon1.3版本官网首推的trino440**
 ![img_1.png](picture/集群版本.png)!
 
 
